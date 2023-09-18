@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Virtual Lab</title>
+</head>
+<body>
+    <h1>Virtual Lab</h1>
+    <button id="deployButton" onclick="startMachine()">Deploy Windows 7 VM</button>
+    <button id="stopButton" onclick="stopMachine()" style="display:none;">Stop VM</button>
+    <p>Turn-On Time: <span id="turnOnTime">Not Started</span></p>
+
+    <script>
+        let machineStartTime;
+        let turnOnTimerInterval;
+        let isMachineOn = false;
+
+        function startMachine() {
+            if (!isMachineOn) {
+                const vmIp = 'your-vm-ip';              // RDP confs
+                const rdpPort = 3389;
+
+                const rdpUrl = `rdp://${vmIp}:${rdpPort}`;      // RDP url - API response
+
+                
+                machineStartTime = new Date();
+                document.getElementById('turnOnTime').textContent = '0 hours 0 minutes 0 seconds';
+
+                .
+                document.getElementById('stopButton').style.display = 'block';
+
+                .
+                document.getElementById('deployButton').disabled = true;
+
+                
+                window.open(rdpUrl, '_blank');              // new tab opening virtual machine
+
+                
+                turnOnTimerInterval = setInterval(updateTurnOnTime, 1000);
+
+                
+                setTimeout(stopMachine, 30 * 60 * 1000);            // 30 mins turn off
+
+                isMachineOn = true;
+            }
+        }
+
+        function updateTurnOnTime() {
+            if (machineStartTime) {
+                const currentTime = new Date();
+                const timeDifference = new Date(currentTime - machineStartTime);
+
+                const hours = timeDifference.getUTCHours();
+                const minutes = timeDifference.getUTCMinutes();
+                const seconds = timeDifference.getUTCSeconds();
+
+                document.getElementById('turnOnTime').textContent = `${hours} hours ${minutes} minutes ${seconds} seconds`;
+            }
+        }
+
+        function stopMachine() {
+            if (isMachineOn) {
+                // Send an HTTP request to stop the VM (replace with your actual API request).
+                // Example:
+                // fetch('http://api.example.com/stop-vm', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                // })
+                // .then(response => {
+                //     if (response.ok) {
+                //         // Handle success (e.g., update UI).
+                //     } else {
+                //         // Handle errors.
+                //         console.error('Failed to stop the machine.');
+                //     }
+                // })
+                // .catch(error => {
+                //     console.error('Error:', error);
+                // });
+
+                
+                clearInterval(turnOnTimerInterval);
+
+                
+                document.getElementById('turnOnTime').textContent = 'Machine Stopped';
+
+                
+                document.getElementById('stopButton').style.display = 'none';       // hide stop button 
+
+                isMachineOn = false;
+            }
+        }
+    </script>
+</body>
+</html>
